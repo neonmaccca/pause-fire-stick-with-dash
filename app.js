@@ -7,10 +7,11 @@ var exec = require('child_process').exec,
 var errors = [],
     ip = '192.168.0.102',
     result = '',
+    activity = 'org.jw.jwlibrary.mobile',
     tasks = [killServer,
              tcpip,
              connect,
-             sendKey85]
+             monkeyDo]
 
 function killServer(callBack) {
     var kill = exec('adb kill-server');
@@ -52,9 +53,22 @@ function sendKey85(callBack) {
     setTimeout(function() {
         var sendKeys = exec('adb shell input keyevent 85')
         sendKeys.stdout.on('close', function(data) {
-            callBack(null, result)
+            if(callBack){
+              callBack(null, result)
+            }
         })
     }, 1000)
+}
+
+function monkeyDo(callBack){
+  setTimeout(function() {
+      var sendKeys = exec('adb shell monkey -p '+activity+' -c android.intent.category.LAUNCHER 1')
+      sendKeys.stdout.on('close', function(data) {
+          if(callBack){
+            callBack(null, result)
+          }
+      })
+  }, 1000)
 }
 
 function controller() {
@@ -65,10 +79,7 @@ function controller() {
                 console.log(result)
             })
         } else {
-            var sendKeys = exec('adb shell input keyevent 85')
-            sendKeys.stdout.on('close', function(data) {
-                console.log('already connected sendKeys done')
-            })
+          tasks.reverse()[0]()
         }
     })
 }
