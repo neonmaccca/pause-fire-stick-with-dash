@@ -15,3 +15,6 @@ npm install
 This repo includes the adb binary for windows only.
 If you have the Android SDK installed or the adb tools bundle and your PATH variable is set to include links to adb then you
 should not need to use a binary in the project root.
+
+#usage
+This is not currently not directly ready for use.
