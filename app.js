@@ -1,7 +1,10 @@
 var exec = require('child_process').exec;
 var waterfall = require('async-waterfall');
+//var mac = '8f:3f:20:33:54:44'
+//var iface = 'eth0'
+//var dash_button = require('node-dash-button')
+//var dash = dash_button(mac, iface, null, 'all')
 var ip = '192.168.0.102'
-var macAddress = ''
 var errors = []
 var result = '';
 
@@ -67,3 +70,6 @@ function controller(){
       })
 }
 controller()
+//dash.on("detected", function (){
+//    controller()
+//});
