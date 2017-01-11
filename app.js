@@ -6,7 +6,11 @@ var exec = require('child_process').exec,
 //var dash = dash_button(mac, iface, null, 'all')
 var errors = [],
     ip = '192.168.0.102',
-    result = ''
+    result = '',
+    tasks = [killServer,
+             tcpip,
+             connect,
+             sendKey85]
 
 function killServer(callBack) {
     var kill = exec('adb kill-server');
@@ -57,7 +61,7 @@ function controller() {
     var devices = exec('adb devices')
     devices.stdout.on('data', function(data) {
         if (data.search(ip) == -1) {
-            waterfall([killServer, tcpip, connect, sendKey85], function(err, result) {
+            waterfall(tasks, function(err, result) {
                 console.log(result)
             })
         } else {
