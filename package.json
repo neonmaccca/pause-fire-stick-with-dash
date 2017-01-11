@@ -1,0 +1,21 @@
+{
+  "name": "dash-pause-fire-stick",
+  "version": "1.0.0",
+  "description": "A small nodejs script to listen for Dash button Arp and UDP requests and send keycode 85 to a fire stick to play/pause when Dash is pressed.",
+  "main": "app.js",
+  "dependencies": {
+    "async-waterfall": "^0.1.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "amazon",
+    "dash",
+    "fire",
+    "tv"
+  ],
+  "author": "Mac Cordingley",
+  "license": "ISC"
+}
