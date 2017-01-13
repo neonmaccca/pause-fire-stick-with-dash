@@ -1,23 +1,21 @@
 var exec = require('child_process').exec,
-    waterfall = require('async-waterfall')
-var arpdash = require("arp-dash");
-var opts = {
-  interface: 3,
-  mac: "ac:63:be:08:c1:7a" //captured by scan function
-};
-var count = 0
-var time = 0
-//var mac = '8f:3f:20:33:54:44'
-//var iface = 'eth0'
-//var dash_button = require('node-dash-button')
-//var dash = dash_button(mac, iface, null, 'all')
-var errors = [],
+    waterfall = require('async-waterfall'),
+    arpdash = require("arp-dash")
+    arpdash = require("arp-dash"),
+    opts = {
+        interface: 3,
+        mac: "ac:63:be:08:c1:7a"
+    },
+    count = 0,
+    time = 0,
+    errors = [],
     ip = '192.168.0.102',
     result = '',
     activity = 'org.jw.jwlibrary.mobile',
     tasks = [killServer,
-             tcpip,
-             connect]
+        tcpip,
+        connect
+    ]
 
 function killServer(callBack) {
     var kill = exec('adb kill-server');
@@ -29,8 +27,8 @@ function killServer(callBack) {
         if (result == '') {
             result += 'Kill server done \n'
         }
-        if(callBack){
-          callBack(null)
+        if (callBack) {
+            callBack(null)
         }
     })
 }
@@ -42,9 +40,9 @@ function tcpip(callBack) {
         result += data
     })
     tcpip.stdout.on('close', function(data) {
-      if(callBack){
-        callBack(null)
-      }
+        if (callBack) {
+            callBack(null)
+        }
     })
 }
 
@@ -55,30 +53,30 @@ function connect(callBack) {
         result += data
     })
     connectIP.stdout.on('close', function(data) {
-      if(callBack){
-        callBack(null)
-      }
+        if (callBack) {
+            callBack(null)
+        }
     })
 }
 
 function sendKey85(callBack) {
-  var sendKeys = exec('adb shell input keyevent 85')
-  sendKeys.stdout.on('close', function(data) {
-      if(callBack){
-        callBack(null)
-      }
-  })
+    var sendKeys = exec('adb shell input keyevent 85')
+    sendKeys.stdout.on('close', function(data) {
+        if (callBack) {
+            callBack(null)
+        }
+    })
 }
 
-function monkeyDo(callBack){
-  setTimeout(function() {
-      var sendKeys = exec('adb shell monkey -p '+activity+' -c android.intent.category.LAUNCHER 1')
-      sendKeys.stdout.on('close', function(data) {
-          if(callBack){
-            callBack(null, result)
-          }
-      })
-  }, 1000)
+function monkeyDo(callBack) {
+    setTimeout(function() {
+        var sendKeys = exec('adb shell monkey -p ' + activity + ' -c android.intent.category.LAUNCHER 1')
+        sendKeys.stdout.on('close', function(data) {
+            if (callBack) {
+                callBack(null, result)
+            }
+        })
+    }, 1000)
 }
 
 function controller() {
@@ -95,16 +93,16 @@ function controller() {
 controller()
 
 arpdash.listen(opts, function(data) {
-  if(time==0){
-    time = Math.floor(Date.now() / 1000)
-    sendKey85()
-    console.log("arp one")
-  }else{
-    var newTime = Math.floor(Date.now() / 1000)
-    console.log(newTime - time)
-    if((newTime-time)>6){
-      sendKey85()
+    if (time == 0) {
+        time = Math.floor(Date.now() / 1000)
+        sendKey85()
+        console.log("arp one")
+    } else {
+        var newTime = Math.floor(Date.now() / 1000)
+        console.log(newTime - time)
+        if ((newTime - time) > 6) {
+            sendKey85()
+        }
+        time = newTime
     }
-    time = newTime
-  }
 });
