@@ -17,66 +17,42 @@ var exec = require('child_process').exec,
         connect
     ]
 
+
+function docmd(command){
+  var cmd = exec(command);
+  cmd.on('close', function() {
+      console.log("done with "+command)
+  })
+}
+
 function killServer(callBack) {
-    var kill = exec('adb kill-server');
-    kill.stdout.on('data', function(data) {
-        result += 'Kill server result \n'
-        result += data
-    })
-    kill.on('close', function() {
-        if (result == '') {
-            result += 'Kill server done \n'
-        }
-        if (callBack) {
-            callBack(null)
-        }
-    })
+    docmd('adb kill-server')
+    callBack()
 }
 
 function tcpip(callBack) {
-    var tcpip = exec('adb tcpip 5555')
-    tcpip.stdout.on('data', function(data) {
-        result += 'tcpip result \n'
-        result += data
-    })
-    tcpip.stdout.on('close', function(data) {
-        if (callBack) {
-            callBack(null)
-        }
-    })
+    docmd('adb tcpip 5555')
+    callBack()
 }
 
 function connect(callBack) {
-    var connectIP = exec('adb connect ' + ip + ':5555')
-    connectIP.stdout.on('data', function(data) {
-        result += 'connect result \n'
-        result += data
-    })
-    connectIP.stdout.on('close', function(data) {
-        if (callBack) {
-            callBack(null)
-        }
-    })
+    docmd('adb connect ' + ip + ':5555')
+    callBack()
 }
 
 function sendKey85(callBack) {
-    var sendKeys = exec('adb shell input keyevent 85')
-    sendKeys.stdout.on('close', function(data) {
-        if (callBack) {
-            callBack(null)
-        }
-    })
+    docmd('adb shell input keyevent 85')
+    if(callBack){
+      callBack()
+    }
 }
 
 function monkeyDo(callBack) {
-    setTimeout(function() {
-        var sendKeys = exec('adb shell monkey -p ' + activity + ' -c android.intent.category.LAUNCHER 1')
-        sendKeys.stdout.on('close', function(data) {
-            if (callBack) {
-                callBack(null, result)
-            }
-        })
-    }, 1000)
+    docmd('adb shell monkey -p ' + activity + ' -c android.intent.category.LAUNCHER 1')
+    if(callBack){
+      callBack()
+    }
+
 }
 
 function controller() {
@@ -96,6 +72,7 @@ arpdash.listen(opts, function(data) {
     if (time == 0) {
         time = Math.floor(Date.now() / 1000)
         sendKey85()
+        monkeyDo()
         console.log("arp one")
     } else {
         var newTime = Math.floor(Date.now() / 1000)
