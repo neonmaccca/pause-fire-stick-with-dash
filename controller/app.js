@@ -35,12 +35,15 @@ function controller() {
     var devices = exec('adb devices')
     devices.stdout.on('data', function(data) {
         if (data.search(config.androidDevice.IP) == -1) {
+          console.log("no connection to "+config.androidDevice.IP+" attempting tp connect")
             waterfall([killServer,
                 tcpip,
                 connect
             ], function(err, result) {
                 console.log(result)
             })
+        }else{
+          console.log("connected to "+config.androidDevice.IP+" awaiting arps")
         }
     })
 }
