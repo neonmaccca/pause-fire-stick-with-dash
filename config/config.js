@@ -1,10 +1,10 @@
 module.exports = {
-  arpDash: {
+  dashButton: {
     interface: null,
     //Dash Button Mac
     mac: null
   },
-  android: {
+  androidDevice: {
     IP: null,
     adbCmd: null
     //you can send key codes to play and pause the media playing etc

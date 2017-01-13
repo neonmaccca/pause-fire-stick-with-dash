@@ -1,6 +1,6 @@
 var exec = require('child_process').exec,
     waterfall = require('async-waterfall'),
-    arpdash = require("arp-dash"),
+    dashButton = require("arp-dash"),
     config = require('../config/config.js'),
     time = 0
 
@@ -22,19 +22,19 @@ function tcpip(callBack) {
 }
 
 function connect(callBack) {
-    docmd('adb connect ' + config.android.IP + ':5555')
+    docmd('adb connect ' + config.androidDevice.IP + ':5555')
     callBack()
 }
 
 function sendADBCommand(command){
   console.log("sent command "+command)
-  docmd(config.android.adbCmd)
+  docmd(config.androidDevice.adbCmd)
 }
 
 function controller() {
     var devices = exec('adb devices')
     devices.stdout.on('data', function(data) {
-        if (data.search(config.android.IP) == -1) {
+        if (data.search(config.androidDevice.IP) == -1) {
             waterfall([killServer,
                 tcpip,
                 connect
@@ -48,14 +48,14 @@ function controller() {
 //controller()
 
 function listen(){
-  arpdash.listen(config.arpDash, function(data) {
+  dashButton.listen(config.dashButton, function(data) {
       if (time == 0) {
           time = Math.floor(Date.now() / 1000)
-          sendADBCommand(config.android.adbCmd)
+          sendADBCommand(config.androidDevice.adbCmd)
       } else {
           var newTime = Math.floor(Date.now() / 1000)
           if ((newTime - time) > 6) {
-              sendADBCommand(config.android.adbCmd)
+              sendADBCommand(config.androidDevice.adbCmd)
           }else{
             console.log("dealing with duplicate arps")
           }
@@ -63,7 +63,12 @@ function listen(){
       }
   });
 }
-
-
+function setConf(conf){
+  config.dashButton.interface = conf.dashButtonItnerface
+  config.dashButton.mac = conf.dashButtonMac
+  config.androidDevice.IP = conf.androidDeviceIP
+  config.androidDevice.adbCmd = conf.adbCommand
+}
+exports.configure = setConf
 exports.initialize = controller
 exports.listen = listen
