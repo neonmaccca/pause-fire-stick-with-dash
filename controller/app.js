@@ -64,7 +64,7 @@ function listen(){
   });
 }
 function setConf(conf){
-  config.dashButton.interface = conf.dashButtonItnerface
+  config.dashButton.interface = conf.dashButtonInterface
   config.dashButton.mac = conf.dashButtonMac
   config.androidDevice.IP = conf.androidDeviceIP
   config.androidDevice.adbCmd = conf.adbCommand
