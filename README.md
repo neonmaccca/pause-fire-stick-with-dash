@@ -1,5 +1,5 @@
 # pause-fire-stick-with-dash
-THis started out a script to talk to a fire stick but has since become a standard script to send adb commands to any android device over tcpip when a dash button is pressed.
+This started out a script to talk to a fire stick but has since become a standard script to send adb commands to any android device over tcpip when a dash button is pressed.
 
 #How to use
 npm install
